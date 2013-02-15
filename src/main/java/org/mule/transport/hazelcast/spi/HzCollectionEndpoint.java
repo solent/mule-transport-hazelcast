@@ -13,26 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.mule.transport.hazelcast;
+package org.mule.transport.hazelcast.spi;
 
 import org.mule.api.MuleException;
 import org.mule.api.MuleMessage;
 import org.mule.transport.AbstractTransportMessageHandler;
-import org.mule.transport.hazelcast.spi.HzCollectionEndpoint.MessageFactory;
 
-import java.lang.Object;
-import java.lang.Override;
+public interface HzCollectionEndpoint {
 
-public class HzCollectionEndpointMessageFactoryAdapter implements MessageFactory {
-
-    private AbstractTransportMessageHandler adaptee;
-
-    public HzCollectionEndpointMessageFactoryAdapter(AbstractTransportMessageHandler adaptee) {
-        this.adaptee = adaptee;
+    public interface MessageFactory {
+        MuleMessage createMuleMessage(Object payload) throws MuleException;
     }
 
-    @Override
-    public MuleMessage createMuleMessage(Object payload) throws MuleException {
-        return adaptee.createMuleMessage( payload );
-    }
+    MuleMessage poll(MessageFactory messageFactory) throws Exception;
+
+    void dispatch(MuleMessage message) throws Exception;
 }

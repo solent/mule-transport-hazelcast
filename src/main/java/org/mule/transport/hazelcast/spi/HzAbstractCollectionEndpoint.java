@@ -13,18 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.mule.transport.hazelcast;
+package org.mule.transport.hazelcast.spi;
 
-import org.mule.transport.AbstractMessageDispatcherFactory;
-import org.mule.api.MuleException;
-import org.mule.api.endpoint.OutboundEndpoint;
-import org.mule.api.transport.MessageDispatcher;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public class HzMessageDispatcherFactory extends AbstractMessageDispatcherFactory
-{
-    @Override
-    public MessageDispatcher create(OutboundEndpoint endpoint) throws MuleException
-    {
-        return new HzMessageDispatcher(endpoint);
+abstract class HzAbstractCollectionEndpoint implements HzCollectionEndpoint {
+
+    protected final Logger logger;
+
+    protected HzAbstractCollectionEndpoint(String collectionName) {
+        this.logger = LoggerFactory.getLogger( this.getClass().getName() + "/" + collectionName );
+        this.logger.debug( "Endpoint created for collection '" + collectionName + "'" );
     }
+
 }
