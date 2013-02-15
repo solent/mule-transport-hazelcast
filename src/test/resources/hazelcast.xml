@@ -1,0 +1,53 @@
+<hazelcast xmlns="http://www.hazelcast.com/schema/config">
+    <group>
+        <name>muletest</name>
+        <password>muletest-password</password>
+    </group>
+    <map name="map-in"/>
+    <map name="map-out"/>
+
+    <map name="pending-requests">
+        <map-store enabled="true">
+            <class-name>fr.solent.hazelcast.SimpleMapStore</class-name>
+            <write-delay-seconds>0</write-delay-seconds>
+        </map-store>
+    </map>
+
+    <map name="failed-requests">
+        <map-store enabled="true">
+            <class-name>fr.solent.hazelcast.SimpleMapStore</class-name>
+            <write-delay-seconds>0</write-delay-seconds>
+        </map-store>
+    </map>
+
+    <map name="processed-requests">
+        <map-store enabled="true">
+            <class-name>fr.solent.hazelcast.SimpleMapStore</class-name>
+            <write-delay-seconds>0</write-delay-seconds>
+        </map-store>
+    </map>
+
+    <map name="pending-transactions-map">
+        <map-store enabled="true">
+            <class-name>fr.solent.hazelcast.SimpleMapStore</class-name>
+            <write-delay-seconds>0</write-delay-seconds>
+        </map-store>
+    </map>
+
+    <map name="processed-transactions-map"/>
+
+    <queue name="pending-transactions">
+        <max-size-per-jvm>0</max-size-per-jvm>
+        <backing-map-ref>pending-transactions-map</backing-map-ref>
+    </queue>
+
+    <queue name="processed-transactions">
+        <max-size-per-jvm>0</max-size-per-jvm>
+        <backing-map-ref>processed-transactions-map</backing-map-ref>
+    </queue>
+
+    <queue name="failed-transactions">
+        <max-size-per-jvm>0</max-size-per-jvm>
+        <backing-map-ref>failed-transactions-map</backing-map-ref>
+    </queue>
+</hazelcast>

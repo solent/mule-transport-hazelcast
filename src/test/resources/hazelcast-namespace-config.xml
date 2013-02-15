@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns="http://www.mulesoft.org/schema/mule/core"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:hazelcast="http://www.mulesoft.org/schema/mule/hazelcast"
+    xsi:schemaLocation="
+       http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/3.1/mule.xsd
+       http://www.mulesoft.org/schema/mule/hazelcast http://www.mulesoft.org/schema/mule/hazelcast/3.1/mule-hazelcast.xsd">
+
+    <hazelcast:connector name="hazelcastConnector">
+        <!-- TODO Add connector specific properties here and then assert that 
+             they have been set in org.mule.transport.hazelcast.HazelcastNamespaceHandlerTestCase -->
+    </hazelcast:connector>
+</mule>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns="http://www.mulesoft.org/schema/mule/core"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:hz="http://www.mulesoft.org/schema/mule/hazelcast"
+    xsi:schemaLocation="
+       http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/3.1/mule.xsd
+       http://www.mulesoft.org/schema/mule/hazelcast http://www.mulesoft.org/schema/mule/hazelcast/3.1/mule-hazelcast.xsd">
+
+    <flow name="simpleTestFlow">
+
+        <hz:inbound-endpoint address="hz://map/map-in"/>
+
+        <log-component/>
+
+        <hz:outbound-endpoint address="hz://map/map-out"/>
+
+    </flow>
+
+    <flow name="requestProcessingFlow">
+
+        <hz:inbound-endpoint address="hz://map/pending-requests"/>
+
+        <log-component/>
+
+        <choice>
+            <when>
+                <expression-filter evaluator="payload-type" expression="java.lang.String"/>
+                <hz:outbound-endpoint address="hz://map/processed-requests"/>
+            </when>
+            <otherwise>
+                <hz:outbound-endpoint address="hz://map/failed-requests"/>
+            </otherwise>
+        </choice>
+
+    </flow>
+
+    <custom-transaction-manager class="org.mule.transport.hazelcast.HzTransactionManager"/>
+
+    <flow name="transactedFlow">
+        <hz:inbound-endpoint address="hz://queue/pending-transactions">
+            <custom-transaction action="ALWAYS_BEGIN" factory-class="org.mule.transport.hazelcast.HzTransactionFactory"/>
+        </hz:inbound-endpoint>
+
+        <log-component/>
+
+        <choice>
+            <when>
+                <expression-filter evaluator="payload-type" expression="java.lang.String"/>
+                <hz:outbound-endpoint address="hz://queue/processed-transactions">
+                    <custom-transaction action="BEGIN_OR_JOIN" factory-class="org.mule.transport.hazelcast.HzTransactionFactory"/>
+                </hz:outbound-endpoint>
+            </when>
+            <otherwise>
+                <!-- The name is invalid so that routing fails and transaction is rolled back -->
+                <hz:outbound-endpoint address="hz://invalidURIToHaveTheTXRolledBack">
+                    <custom-transaction action="BEGIN_OR_JOIN" factory-class="org.mule.transport.hazelcast.HzTransactionFactory"/>
+                </hz:outbound-endpoint>
+            </otherwise>
+        </choice>
+    </flow>
+</mule>

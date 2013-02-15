@@ -1,0 +1,1 @@
+http\://www.mulesoft.org/schema/mule/hazelcast=org.mule.transport.hazelcast.config.HzNamespaceHandler
